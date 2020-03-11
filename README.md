@@ -83,7 +83,12 @@ import { Link } from "react-router-dom";
 </Link>
 ```
 
-### optional
+### Optional Chaining (JS Grammer)
+
+```js
+// {data && data.movie && data.movie.medium_cover_image}
+<Poster bg={data?.movie?.medium_cover_image}></Poster>
+```
 
 
 ### Using Local-State 
