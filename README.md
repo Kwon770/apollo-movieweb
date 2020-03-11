@@ -70,7 +70,7 @@ export default = () => {
 }
 ```
 
-### <a href> % Link
+### &#60;a href/&#62; & Link
 
 - ```<a href>``` kill app, you must use ```<Link />```
 
