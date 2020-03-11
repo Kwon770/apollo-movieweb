@@ -11,9 +11,9 @@ const Container = styled.div`
 `;
 
 const Poster = styled.div`
-  background-image: url(${props => props.bg});
   height: 100%;
   width: 100%;
+  background-image: url(${props => props.bg});
   background-size: cover;
   background-position: center center;
 `;
