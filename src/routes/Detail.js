@@ -7,14 +7,18 @@ import Movie from "../components/Movie";
 
 // query getMovie(%id: Int!) {} => query for apollo
 // movie(id: $id){} => query for graphql
+// if i didn't get id by get-request,
+// apollo don't know which portrait is same movie with this detail
 const GET_MOVIE = gql`
   query getMovie($id: Int!) {
     movie(id: $id) {
+      id
       title
       medium_cover_image
       language
       rating
       description_intro
+      isLiked @client
     }
     suggestions(id: $id) {
       id
@@ -26,14 +30,18 @@ const GET_MOVIE = gql`
 export default () => {
   // Get id from uri
   const { id } = useParams();
-  const { loading, data } = useQuery(GET_MOVIE, {
+  const { loading, data, isLiked } = useQuery(GET_MOVIE, {
     variables: { id: parseInt(id) }
   });
   return (
     <Container>
       <Infor>
         <Column>
-          <Title>{loading ? "Loading..." : data.movie.title}</Title>
+          <Title>
+            {loading
+              ? "Loading..."
+              : `${data.movie.title} ${data.movie.isLiked ? "💓" : "😭"}`}
+          </Title>
           <Subtitle>
             {data?.movie?.language} · {data?.movie?.rating}
           </Subtitle>
