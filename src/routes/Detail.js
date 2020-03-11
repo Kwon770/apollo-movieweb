@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import styled from "styled-components";
+import Movie from "../components/Movie";
 
 // query getMovie(%id: Int!) {} => query for apollo
 // movie(id: $id){} => query for graphql
@@ -15,6 +16,10 @@ const GET_MOVIE = gql`
       rating
       description_intro
     }
+    suggestions(id: $id) {
+      id
+      medium_cover_image
+    }
   }
 `;
 
@@ -26,32 +31,49 @@ export default () => {
   });
   return (
     <Container>
-      <Column>
-        <Title>{loading ? "Loading..." : data.movie.title}</Title>
-        {!loading && data.movie && (
-          <>
-            <Subtitle>
-              {data.movie.language} · {data.movie.rating}
-            </Subtitle>
-            <Description>{data.movie.description_intro}</Description>
-          </>
-        )}
-      </Column>
-      <Poster
-        bg={data && data.movie ? data.movie.medium_cover_image : " "}
-      ></Poster>
+      <Infor>
+        <Column>
+          <Title>{loading ? "Loading..." : data.movie.title}</Title>
+          <Subtitle>
+            {data?.movie?.language} · {data?.movie?.rating}
+          </Subtitle>
+          <Description>{data?.movie?.description_intro}</Description>
+        </Column>
+        <Poster bg={data?.movie?.medium_cover_image}></Poster>
+      </Infor>
+      {data?.suggestions ? (
+        <Suggestion>
+          <Title> Our Suggestions</Title>
+          <Movies>
+            {data.suggestions.map(s => (
+              <Movie key={s.id} id={s.id} bg={s.medium_cover_image} />
+            ))}
+          </Movies>
+        </Suggestion>
+      ) : (
+        " "
+      )}
     </Container>
   );
 };
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-image: linear-gradient(-45deg, #d754ab, #fd723a);
+  color: white;
+`;
+
+const Infor = styled.div`
+  height: 100vh;
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  color: white;
 `;
 
 const Column = styled.div`
@@ -80,4 +102,22 @@ const Poster = styled.div`
   background-image: url(${props => props.bg});
   background-size: cover;
   background-position: center center;
+`;
+
+const Suggestion = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
+const Movies = styled.div`
+  margin-top: 80px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 25px;
+  width: 60%;
+  position: relative;
+  top: -50px;
 `;
