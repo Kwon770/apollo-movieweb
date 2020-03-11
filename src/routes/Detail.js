@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/react-hooks";
 import styled from "styled-components";
 import Movie from "../components/Movie";
 
-// query getMovie(%id: Int!) {} => query for apollo
+// query getMovie($id: Int!) {} => query for apollo
 // movie(id: $id){} => query for graphql
 // if i didn't get id by get-request,
 // apollo don't know which portrait is same movie with this detail
@@ -30,7 +30,7 @@ const GET_MOVIE = gql`
 export default () => {
   // Get id from uri
   const { id } = useParams();
-  const { loading, data, isLiked } = useQuery(GET_MOVIE, {
+  const { loading, data } = useQuery(GET_MOVIE, {
     variables: { id: parseInt(id) }
   });
   return (
